@@ -1,1 +1,71 @@
-/Users/karl/Dropbox/Config/emacs/feeds.org
+* Feeds :elfeed:
+** Web comics :webcomics:
+*** [[https://xkcd.com/atom.xml][xkcd]]
+** Clojure :clojure:
+*** [[http://planet.clojure.in/atom.xml][Planet Clojure]]
+** Maths :maths:
+*** [[http://jeremykun.com/feed/][Math and Programming]]
+*** [[https://gowers.wordpress.com/feed/][Gowers's Weblog]]
+*** [[http://www.statsguy.co.uk/feed/][The Stats Guy]]
+** Emacs :emacs:
+*** [[http://planet.emacsen.org/atom.xml][Planet Emacsen]]
+*** [[http://emacsredux.com/atom.xml][Emacs Redux]]
+*** [[http://feeds.feedburner.com/emacslife][emacs life]]
+*** [[https://www.masteringemacs.org/feed][Mastering Emacs]]
+*** [[https://emacs.wordpress.com/feed/][minor emacs wizardry]]
+*** [[http://feeds.feedburner.com/emacsblog][M-x all-things-emacs]]
+*** [[http://whattheemacsd.com/atom.xml][What the .emacs.d!?]]
+*** [[http://www.podbean.com/site/podcatcher/index/feedurl/http%25253A%25252F%25252Femacsel.podbean.com%25252Ffeed%25252F][Emacs.el Podcast]] :podcast:
+** Reading :long:
+*** [[http://feeds.feedburner.com/EconomicPrincipals][Economic Principals]]
+*** [[https://thebrowser.com/feed/][The Browser]]
+*** [[http://feeds2.feedburner.com/tomdispatch/esUU][TomDispatch - Blog]]
+*** [[http://edge.org/feed][Edge.org]]
+*** [[http://nautil.us/rss/all][Nautilus]]
+** Scholarly :scholarly:
+*** [[http://blog.martinfenner.org/rss.xml][Gobbledygook]]
+*** [[http://www.dcscience.net/feed/][DC's Improbable Science]]
+*** [[https://plested.wordpress.com/feed/][Serious Piffle]]
+*** [[http://lemire.me/blog/feed/][Daniel Lemire's blog]]
+** Computing :computing:
+*** [[http://onethingwell.org/rss?bac99e00][One Thing Well]]
+*** [[http://lwn.net/headlines/newrss][LWN.net]]
+** Science :science:
+*** [[http://www.the100.ci/feed/][The 100% CI]]
+*** [[http://www.preposterousuniverse.com/blog/feed/][Sean Carroll]]
+*** [[https://gravityandlevity.wordpress.com/feed/][Gravity and Levity]]
+*** [[http://alexanderetz.com/feed/][The Etz-Files]]
+*** [[http://www.symmetrymagazine.org/feed][symmetry magazine]]
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCo-3ThNQmPmQSQL_L6Lx1_w][DeepSkyVideos]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UC6nSFpj9HTCZ5t-N3Rm3-HA][Vsauce]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCtESv1e7ntJaLJYKIO1FoYw][Periodic Videos]] :video:
+** ML :ml:
+*** [[http://colah.github.io/rss.xml][colah's blog]]
+** Blogs :blog:
+*** [[http://www.taxresearch.org.uk/Blog/feed/][Tax Research]]
+*** [[http://qqrs.github.io/atom.xml][qqrs]]
+*** [[http://www.antipope.org/charlie/blog-static/atom.xml][Charlie Stross]]
+** Gaming :gaming:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCxzC4EngIsMrPmbm6Nxvb-A][Scott Manley]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCP6f9x4iXk3LH8Q1sqJmYPQ][paulsoaresjr]] :video:
+** Housing :housing:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCoNTMWgGuXtGPLv9UeJZwBw][Living Big In A Tiny House]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCDsElQQt_gCZ9LgnW-7v-cQ][Kirsten Dirksen]] :video:
+** Sailing :sailing:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UC5_D952JEfIDOj0mASbZ1pQ][Annie Ford]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCm8_0UnPdabbntSBppXp3sA][Shaun Sailing]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCZdQjaSoLjIzFnWsDQOv4ww][Sailing La Vagabonde]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCD32lcECDXD-Mz9rgvM03kg][Sailing News]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCvLc83k5o11EIF1lEo0VmuQ][SV Delos Sailing]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCkYfFeySHGN4DPrOc9So7PA][WhiteSpotPirates]] :video:
+** Clean Energy :energy:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCzz4CoEgSgWNs9ZAvRMhW2A][fullychargedshow]] :video:
+** Electronics :electronics:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UC2DjFE7Xf11URZqWBigcVOQ][EEVblog]] :video:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UCtM5z2gkrGRuWd0JQMx76qA][bigclivedotcom]] :video:
+** Life :life:
+*** [[https://www.youtube.com/feeds/videos.xml?channel_id=UC7IcJI8PUf5Z3zKxnZvTBog][The School of Life]] :video:
+** Sci-Fi :scifi:
+*** [[https://rss.art19.com/the-greatest-generation][The Greatest Generation]] :podcast:
+
+
