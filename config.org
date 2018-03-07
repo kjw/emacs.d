@@ -442,11 +442,13 @@ Look up words in the MacOS dictionary.
 
 * The Mode Line
 
-Shorten some common mode names.
+Hide minor mode names in a menu.
 
 #+BEGIN_SRC emacs-lisp
-(use-package delight
-  :ensure t)
+(use-package minions
+  :ensure t
+  :config (minions-mode 1)
+  :bind (("C-c m" . minions-minor-modes-menu)))
 #+END_SRC
 
 Show icons instead of major mode names. This frees up a lot of space!
@@ -483,6 +485,18 @@ location service is used.
     (setq org-babel-clojure-backend 'cider)
     (setq org-directory "~/Org")
     (setq org-default-notes-file (concat org-directory "/capture.org")))
+
+(use-package org-bullets
+  :ensure t
+  :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+
+emacs-htmlize for html export
+
+#+BEGIN_SRC emacs-lisp
+(use-package htmlize
+  :ensure t)
 #+END_SRC
 
 * Feed Reader
