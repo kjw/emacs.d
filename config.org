@@ -28,6 +28,8 @@ in Emacs's *exec-path*.
 #+BEGIN_SRC emacs-lisp
 (setq exec-path (append exec-path '("/usr/local/bin")))
 (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+(setq exec-path (append exec-path '("/Library/TeX/texbin")))
+(setenv "PATH" (concat "/Library/TeX/texbin:" (getenv "PATH")))
 #+END_SRC
 
 * Using use-package
@@ -110,16 +112,6 @@ Make Emacs write back up and auto save files to a centralised directory.
 
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-#+END_SRC
-
-Let's have some line numbers on our buffers.
-
-#+BEGIN_SRC emacs-lisp
-(use-package nlinum
-  :ensure t
-  :config
-    (setq nlinum-format "%d ")
-    (global-nlinum-mode -1))
 #+END_SRC
 
 * Moving Around Emacs
@@ -232,6 +224,7 @@ Install and configure cider and clj-refactor.
   :bind (("C-c j" . cider-jack-in))
   :config
     (add-hook 'cider-repl-mode-hook #'company-mode)
+    (add-hook 'clojure-mode-hook #'display-line-numbers-mode)
     (add-hook 'cider-mode-hook #'company-mode)
     (add-hook 'cider-mode-hook #'eldoc-mode)
     (setq cider-repl-use-pretty-printing t)
@@ -243,8 +236,7 @@ Install and configure cider and clj-refactor.
     (add-hook 
       'clojure-mode-hook 
       (lambda () 
-        (clj-refactor-mode 1)
-        (cljr-add-keybindings-with-prefix "C-c C-m"))))
+        (clj-refactor-mode 1))))
 #+END_SRC
 
 ** Javascript
@@ -263,10 +255,12 @@ We use company mode for auto-completion. A C-c / will autocomplete at point.
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :delight " C"
-  :bind (("C-c /" . company-complete))
+  :bind 
+  (("C-c /" . company-complete)
+  ("C-c \\" . company-show-doc-buffer))
   :config
-    (global-company-mode))
+  (setq company-idle-delay 0)
+  (add-hook 'after-init-hook 'global-company-mode))
 #+END_SRC
 
 ** Version Control
@@ -318,21 +312,25 @@ files within projects, search and replace within projects, etc.
 #+BEGIN_SRC emacs-lisp
 (use-package projectile
   :ensure t
-  :delight '(:eval (concat " P" (projectile-project-name)))
   :config
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
     (add-hook 'prog-mode-hook 'projectile-mode)
-    ;; (projectile-global-mode)
     (setq projectile-switch-project-action 'projectile-dired))
 #+END_SRC
+
+#+RESULTS:
+: t
 
 Also use treemacs to display a filesystem tree for projectile projects.
 
 #+BEGIN_SRC emacs-lisp
+(use-package treemacs
+  :ensure t
+  :bind (("C-c t"   . treemacs)))
+
 (use-package treemacs-projectile
   :ensure t
-  :config (setq treemacs-git-integration t)
-  :bind (:map global-map
-              ("C-c t" . treemacs-projectile-toggle)))
+  :after treemacs projectile)
 #+END_SRC
 
 ** Other Tools
@@ -359,7 +357,10 @@ We will occasionally use markdown, so let's get the mode for it.
 
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq markdown-command "/usr/local/bin/markdown")
+  (setq markdown-css-paths `(,"/Users/karl/Org/cv/style.css")))
 #+END_SRC
 
 ** Spellchecking
@@ -373,11 +374,14 @@ English dictionaries add-on for OpenOffice.
   :ensure t
   :bind (("C-c s" . flyspell-buffer))
   :config
+    (ispell-hunspell-add-multi-dic "en_GB")
     (setq-default ispell-program-name "hunspell")
+    (setq ispell-dictionary "en_GB")
     (setq ispell-really-hunspell t))
 #+END_SRC
 
 ** Dictionary
+
 
 Look up words in the MacOS dictionary.
 
@@ -387,8 +391,34 @@ Look up words in the MacOS dictionary.
   :bind (("C-c w" . osx-dictionary-search-word-at-point)))
 #+END_SRC
 
-* Look and Feel
+** Wikipedia
 
+#+BEGIN_SRC emacs-lisp
+(defun wikipedia-lookup-word-at-point ()
+  (interactive)
+  (let (word)
+    (setq word
+          (if (use-region-p)
+              (buffer-substring-no-properties (region-beginning) (region-end))
+            (current-word)))
+    (setq word (replace-regexp-in-string " " "+" word))
+    (eww (concat "https://en.m.wikipedia.org/w/index.php?search=" word))))
+
+(global-set-key (kbd "C-c q") 'wikipedia-lookup-word-at-point)
+#+END_SRC
+
+** Note Taking
+
+#+BEGIN_SRC emacs-lisp
+(use-package deft
+  :ensure t
+  :bind (("C-c n" . deft))
+  :config (setq deft-recursive t
+                deft-directory "~/Org"
+                deft-extensions '("md" "org" "txt")))
+#+END_SRC
+
+* Look and Feel
 ** A Theme
 
 #+BEGIN_SRC emacs-lisp
@@ -396,10 +426,22 @@ Look up words in the MacOS dictionary.
   :ensure t
   :config
     (load-theme 'solarized-light t)
-    (set-default-font "Inconsolata-18")
+    (set-default-font "Inconsolata-16")
+    (set-face-attribute 'default nil :foreground "#1c1e1f")
+    (set-face-attribute 'shadow nil :foreground "#646c70")
     (set-face-attribute 'variable-pitch nil :family "Merriweather")
-    (set-face-attribute 'font-lock-type-face nil :foreground nil)
-    (set-face-attribute 'font-lock-keyword-face 
+    (set-face-attribute 'font-lock-type-face nil :foreground nil :underline nil)
+    (set-face-attribute 'org-level-1 nil :foreground nil)
+    (set-face-attribute 'org-level-2 nil :foreground nil)
+    (set-face-attribute 'org-level-3 nil :foreground nil)
+    (set-face-attribute 'org-level-4 nil :foreground nil)
+    (set-face-attribute 'org-level-5 nil :foreground nil)
+    (set-face-attribute 'org-level-6 nil :foreground nil)
+    (set-face-attribute 'org-meta-line nil :foreground "#646c70")
+    (set-face-attribute 'cider-deprecated-face nil :background nil :underline "#b58900")
+    (set-face-attribute 'cider-error-highlight-face nil :underline "red")
+    (set-face-attribute 'font-lock-builtin-face nil :foreground "#1c1e1f")
+    (set-face-attribute 'font-lock-keyword-face
       nil 
       :foreground nil
       :weight 'normal)
@@ -429,6 +471,9 @@ Look up words in the MacOS dictionary.
       :slant 'italic))
 #+END_SRC
 
+#+RESULTS:
+: t
+
 ** The Frame
 
 #+BEGIN_SRC emacs-lisp
@@ -450,11 +495,6 @@ Hide minor mode names in a menu.
   :config (minions-mode 1)
   :bind (("C-c m" . minions-minor-modes-menu)))
 #+END_SRC
-
-Show icons instead of major mode names. This frees up a lot of space!
-The mode line clock will adjust its colour based on the time of day
-and the current latitude. To get updates to the latitude the MacOS
-location service is used.
 
 #+BEGIN_SRC emacs-lisp
 (use-package osx-location
@@ -481,15 +521,30 @@ location service is used.
          ("C-c c" . org-capture)
          ("C-c b" . org-iswitchb))
   :config
-    (setq org-startup-indented t)
-    (setq org-babel-clojure-backend 'cider)
-    (setq org-directory "~/Org")
-    (setq org-default-notes-file (concat org-directory "/capture.org")))
+    (setq org-todo-keywords
+      '((sequence "TODO(t!)" "STARTED(a!)" "WAITING(w@/!)" 
+                  "|" "DONE(d)" "CANCELLED(c)"))
+          org-startup-indented t
+          org-pretty-entities t
+          org-hide-emphasis-markers t
+          org-fontify-whole-heading-line t
+          org-fontify-done-headline t
+          org-ellipsis " ..."
+          org-babel-clojure-backend 'cider
+          org-directory "~/Org"
+          org-default-notes-file (concat org-directory "/capture.org")))
 
 (use-package org-bullets
   :ensure t
   :config
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+    (add-hook 'org-mode-hook 
+      (lambda () 
+        (org-bullets-mode 1)
+        (variable-pitch-mode 1)
+        (setq left-margin-width 2
+              right-margin-width 2
+              line-spacing 0.1)
+        (set-window-buffer nil (current-buffer)))))
 #+END_SRC
 
 emacs-htmlize for html export
@@ -514,5 +569,13 @@ emacs-htmlize for html export
   :config
     (setq rmh-elfeed-org-files (list "~/.emacs.d/feeds.org"))
     (elfeed-org))
+#+END_SRC
+
+* Hacker News Reader
+
+#+BEGIN_SRC emacs-lisp
+(use-package hackernews
+  :ensure t
+  :bind (("C-c h" . hackernews)))
 #+END_SRC
 
