@@ -427,6 +427,7 @@ Look up words in the MacOS dictionary.
   :config
     (load-theme 'solarized-light t)
     (set-default-font "Inconsolata-16")
+    (set-face-attribute 'mode-line nil :box '(:line-width 5 :color "#eee8d5") :underline nil)
     (set-face-attribute 'default nil :foreground "#1c1e1f")
     (set-face-attribute 'shadow nil :foreground "#646c70")
     (set-face-attribute 'variable-pitch nil :family "Merriweather")
@@ -529,10 +530,18 @@ Hide minor mode names in a menu.
           org-hide-emphasis-markers t
           org-fontify-whole-heading-line t
           org-fontify-done-headline t
+          org-src-fontify-natively t
           org-ellipsis " ..."
           org-babel-clojure-backend 'cider
           org-directory "~/Org"
           org-default-notes-file (concat org-directory "/capture.org")))
+
+(use-package mixed-pitch
+  :ensure t
+  :config
+    (add-hook 'org-mode-hook
+      (lambda ()
+        (mixed-pitch-mode 1))))
 
 (use-package org-bullets
   :ensure t
