@@ -3,7 +3,7 @@
 
 * Introduction
 
-Welcome to my Emacs configuration. This configuration is modelled on 
+Welcome to my Emacs configuration. This configuration is modelled on
 Arjen Wiersma's configuration, which can be found [[https://gitlab.com/buildfunthings/emacs-config][in this repository]].
 
 #+BEGIN_SRC emacs-lisp
@@ -233,10 +233,7 @@ Install and configure cider and clj-refactor.
 (use-package clj-refactor
   :ensure t
   :config
-    (add-hook 
-      'clojure-mode-hook 
-      (lambda () 
-        (clj-refactor-mode 1))))
+    (add-hook 'clojure-mode-hook #'clj-refactor-mode))
 #+END_SRC
 
 ** Javascript
@@ -426,8 +423,18 @@ Look up words in the MacOS dictionary.
   :ensure t
   :config
     (load-theme 'solarized-light t)
-    (set-default-font "Inconsolata-16")
-    (set-face-attribute 'mode-line nil :box '(:line-width 5 :color "#eee8d5") :underline nil)
+    (set-default-font "Inconsolata-14")
+    (set-face-attribute 'cursor nil :background "#6c71c4")
+    (set-face-attribute 'header-line nil :box '(:line-width 5 :color "#eee8d5") 
+                                         :background "#eee8d5"
+                                         :underline nil 
+                                         :overline nil)
+    (set-face-attribute 'mode-line nil :box '(:line-width 5 :color "#eee8d5") 
+                                       :underline nil 
+                                       :overline nil)
+    (set-face-attribute 'mode-line-inactive nil :box '(:line-width 5 :color "#fdf6e3") 
+                                                :underline nil 
+                                                :overline nil)
     (set-face-attribute 'default nil :foreground "#1c1e1f")
     (set-face-attribute 'shadow nil :foreground "#646c70")
     (set-face-attribute 'variable-pitch nil :family "Merriweather")
@@ -480,13 +487,24 @@ Look up words in the MacOS dictionary.
 #+BEGIN_SRC emacs-lisp
 (blink-cursor-mode -1)
 (setq visible-bell nil)
+(setq-default cursor-type 'box)
 (setq ring-bell-function 'ignore)
 (setq inhibit-splash-screen t)
-
 (fringe-mode nil)
+
+(use-package ns-auto-titlebar
+  :ensure t
+  :config 
+    (when (eq system-type 'darwin) (ns-auto-titlebar-mode))
+    (setq frame-background-mode 'light)
+    (mapc 'frame-set-background-mode (frame-list)))
 #+END_SRC
 
 * The Mode Line
+
+#+BEGIN_SRC emacs-lisp
+(setq column-number-mode t)
+#+END_SRC
 
 Hide minor mode names in a menu.
 
@@ -495,21 +513,6 @@ Hide minor mode names in a menu.
   :ensure t
   :config (minions-mode 1)
   :bind (("C-c m" . minions-minor-modes-menu)))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(use-package osx-location
-  :disabled t
-  :ensure t
-  :config
-  (sky-color-clock-initialize-openweathermap-client "97274e04411791eab733debdc70c87f8" 2640729)
-  (setq sky-color-clock-enable-emoji-icon t)
-  (setq sky-color-clock-enable-temperature-indicator t)
-  (push '(:eval (sky-color-clock)) (default-value 'mode-line-format))
-  (sky-color-clock-initialize osx-location-latitude)
-  (add-hook 'osx-location-changed-hook
-    (lambda ()
-      (sky-color-clock-initialize osx-location-latitude))))
 #+END_SRC
 
 * Org Mode
@@ -539,6 +542,10 @@ Hide minor mode names in a menu.
 (use-package mixed-pitch
   :ensure t
   :config
+    (setq mixed-pitch-variable-pitch-cursor nil)
+    (add-hook 'markdown-mode-hook
+      (lambda ()
+        (mixed-pitch-mode 1)))
     (add-hook 'org-mode-hook
       (lambda ()
         (mixed-pitch-mode 1))))
@@ -587,4 +594,3 @@ emacs-htmlize for html export
   :ensure t
   :bind (("C-c h" . hackernews)))
 #+END_SRC
-
