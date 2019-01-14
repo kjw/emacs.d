@@ -221,7 +221,6 @@ Install and configure cider and clj-refactor.
 #+BEGIN_SRC emacs-lisp
 (use-package cider
   :ensure t
-  :bind (("C-c j" . cider-jack-in))
   :config
     (add-hook 'cider-repl-mode-hook #'company-mode)
     (add-hook 'clojure-mode-hook #'display-line-numbers-mode)
@@ -273,6 +272,9 @@ Include the wonderful magit, and an extension for git flow support.
   :ensure t
   :config
     (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
+
+(use-package forge
+  :ensure t)
 
 (use-package git-gutter
   :ensure t
@@ -415,6 +417,14 @@ Look up words in the MacOS dictionary.
                 deft-extensions '("md" "org" "txt")))
 #+END_SRC
 
+** Emoji!
+
+#+BEGIN_SRC emacs-lisp
+(use-package emojify
+  :ensure t
+  :config (add-hook 'after-init-hook #'global-emojify-mode))
+#+END_SRC
+
 * Look and Feel
 ** A Theme
 
@@ -423,7 +433,7 @@ Look up words in the MacOS dictionary.
   :ensure t
   :config
     (load-theme 'solarized-light t)
-    (set-default-font "Inconsolata-14")
+    (set-default-font "Inconsolata-16")
     (set-face-attribute 'cursor nil :background "#6c71c4")
     (set-face-attribute 'header-line nil :box '(:line-width 5 :color "#eee8d5") 
                                          :background "#eee8d5"
