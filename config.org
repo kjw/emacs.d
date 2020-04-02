@@ -691,21 +691,6 @@ Environment variables for the viator NSP codebase.
 (setenv "VM_NUM" "99")
 #+END_SRC
 
-#+RESULTS:
-: 99
-
-Jenkins UI.
-
-#+BEGIN_SRC emacs-lisp
-(use-package jenkins
-  :ensure t
-  :config
-    (setq jenkins-api-token "11fc5532c9ee7739e8c1cd86cba336e3cc"
-          jenkins-url "https://avrdevjenkins00n.ndmad2.tripadvisor.com/job/nsp"
-          jenkins-username "kward"
-          jenkins-viewname nil))
-#+END_SRC
-
 Visual regex using PCRE.
 
 #+BEGIN_SRC emacs-lisp
