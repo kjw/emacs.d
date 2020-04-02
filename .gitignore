@@ -10,4 +10,13 @@ network-security.data
 projectile-bookmarks.eld
 smex-items
 url
-.cache
+.*
+emojis
+forge-database.sqlite
+hackernews
+meghanada
+places
+tramp
+transient
+workspace
+eclipse.jdt.ls
