@@ -91,10 +91,12 @@ We turn off the mouse interface as soon as possible to avoid momentary display
 (horizontal-scroll-bar-mode -1)
 #+END_SRC
 
-Deal with the # character on UK mac keyboards being at alt-grave-3 (M-3 for us.)
+Deal with the # character on UK mac keyboards being at alt-grave-3 (M-3 for us,)
+and also the Euro symbol on alt-grave-4.
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key (kbd "M-3") '(lambda () (interactive) (insert "#")))
+(global-set-key (kbd "M-2") '(lambda () (interactive) (insert "€")))
 #+END_SRC
 
 Smooth mouse scrolling.
@@ -135,7 +137,7 @@ other use-package statement.
 (global-set-key (kbd "C-c i")
   (lambda ()
     (interactive)
-    (find-file "~/Org/index.org")))
+    (find-file "~/Documents/Org/all.org")))
 #+END_SRC
 
 We set the default flags for dired to list all files, provide human
@@ -186,6 +188,17 @@ how frequently they are used.
     (("M-x" . smex)))
 #+END_SRC
 
+** Helm
+
+   Trying out a bunch of helm packages
+
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :ensure t
+  :bind
+    (("M-x" . helm-M-x)))
+#+END_SRC
+
 ** Listing Buffers
 
 Replace the default list-buffers with ibuffer. We group buffers by the version
@@ -214,6 +227,15 @@ Show matching parantheses. Useful when writing many programming languages.
 (show-paren-mode t)
 #+END_SRC
 
+** Docker
+#+BEGIN_SRC emacs-lisp
+(use-package docker
+  :ensure t
+  :bind ("C-c k" . docker))
+
+(use-package dockerfile-mode
+  :ensure t)
+#+END_SRC
 ** Clojure
 
 Install and configure cider and clj-refactor.
@@ -244,6 +266,28 @@ Install and configure cider and clj-refactor.
     (setq-default js2-basic-offset 2))
 #+END_SRC
 
+** Java
+
+#+BEGIN_SRC emacs-lisp
+(use-package gradle-mode
+  :ensure t
+  :config
+    (setq 
+      gradle-gradlew-executable "./gradlew"
+      gradle-use-gradlew 't)
+    (gradle-mode 1))
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** PHP
+
+#+BEGIN_SRC emacs-lisp
+(use-package php-mode
+  :ensure t)
+#+END_SRC
+
 ** Auto Completion
 
 We use company mode for auto-completion. A C-c / will autocomplete at point.
@@ -266,6 +310,8 @@ Include the wonderful magit, and an extension for git flow support.
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :ensure t
+  :config
+    (setq vc-handled-backends nil)
   :bind (("C-c g" . magit-status)))
 
 (use-package magit-gitflow
@@ -292,15 +338,11 @@ We can manage SSH tunnels via emacs package `ssh-tunnels`.
   :bind (("C-c u" . ssh-tunnels))
   :config 
   (setq ssh-tunnels-configurations
-  '((:name "Boston Kibana"
-     :local-port 5601
-     :remote-port 5601
-     :host "logman2"
-     :login "logman2.crossref.org")
-    (:name "API Test Kibana"
-     :local-poort 5601
-     :remote-port 5601
-     :login "aurora"))))
+  '((:name "Boop Transmission"
+     :local-port 9091
+     :remote-port 9091
+     :host "localhost"
+     :login "boop"))))
 #+END_SRC
 
 ** Projects
@@ -339,6 +381,11 @@ A nice REST client.
 #+BEGIN_SRC emacs-lisp
 (use-package restclient
   :ensure t)
+
+(use-package company-restclient
+  :ensure t
+  :config
+    (add-to-list 'company-backends 'company-restclient))
 #+END_SRC
 
 And a mode for editing YAML.
@@ -348,6 +395,22 @@ And a mode for editing YAML.
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
+#+END_SRC
+
+A little eshell config.
+
+#+BEGIN_SRC emacs-lisp
+
+(setq eshell-visual-commands '("redis-cli" "docker-compose"))
+(setq eshell-visual-subcommands '(("git" "log" "diff" "show")))
+#+END_SRC
+
+** Flycheck
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 #+END_SRC
 
 * Writing
@@ -361,6 +424,20 @@ We will occasionally use markdown, so let's get the mode for it.
   (setq markdown-command "/usr/local/bin/markdown")
   (setq markdown-css-paths `(,"/Users/karl/Org/cv/style.css")))
 #+END_SRC
+
+** Editing text in Firefox
+
+Via the GhostText firefox plugin, using atomic-chrome text areas in firefox can be edited in emacs.
+
+#+BEGIN_SRC emacs-lisp
+(use-package atomic-chrome
+  :ensure t
+  :config
+    (atomic-chrome-start-server))
+#+END_SRC
+
+#+RESULTS:
+: t
 
 ** Spellchecking
 
@@ -409,45 +486,38 @@ Look up words in the MacOS dictionary.
 ** Note Taking
 
 #+BEGIN_SRC emacs-lisp
-(use-package deft
-  :ensure t
-  :bind (("C-c n" . deft))
-  :config (setq deft-recursive t
-                deft-directory "~/Org"
-                deft-extensions '("md" "org" "txt")))
+  (use-package deft
+    :ensure t
+    :bind (("C-c n" . deft))
+    :config (setq deft-recursive t
+                  deft-directory "~/Documents/Org"
+                  deft-extensions '("md" "org" "txt")))
 #+END_SRC
 
-** Emoji!
-
-#+BEGIN_SRC emacs-lisp
-(use-package emojify
-  :ensure t
-  :config (add-hook 'after-init-hook #'global-emojify-mode))
-#+END_SRC
 
 * Look and Feel
 ** A Theme
 
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
-  :ensure t
+  :ensure f
   :config
     (load-theme 'solarized-light t)
-    (set-default-font "Inconsolata-16")
+    (set-default-font "Inconsolata-14")
     (set-face-attribute 'cursor nil :background "#6c71c4")
-    (set-face-attribute 'header-line nil :box '(:line-width 5 :color "#eee8d5") 
+    (set-face-attribute 'header-line nil :box '(:line-width 2 :color "#eee8d5") 
                                          :background "#eee8d5"
                                          :underline nil 
                                          :overline nil)
-    (set-face-attribute 'mode-line nil :box '(:line-width 5 :color "#eee8d5") 
+    (set-face-attribute 'mode-line nil :box '(:line-width 2 :color "#eee8d5") 
                                        :underline nil 
                                        :overline nil)
-    (set-face-attribute 'mode-line-inactive nil :box '(:line-width 5 :color "#fdf6e3") 
+    (set-face-attribute 'mode-line-inactive nil :box '(:line-width 2 :color "#eee8d5") 
                                                 :underline nil 
                                                 :overline nil)
     (set-face-attribute 'default nil :foreground "#1c1e1f")
     (set-face-attribute 'shadow nil :foreground "#646c70")
-    (set-face-attribute 'variable-pitch nil :family "Merriweather")
+    (set-face-attribute 'variable-pitch nil :family "Merriweather" :height 140)
     (set-face-attribute 'font-lock-type-face nil :foreground nil :underline nil)
     (set-face-attribute 'org-level-1 nil :foreground nil)
     (set-face-attribute 'org-level-2 nil :foreground nil)
@@ -512,29 +582,29 @@ Look up words in the MacOS dictionary.
 
 * The Mode Line
 
-#+BEGIN_SRC emacs-lisp
-(setq column-number-mode t)
-#+END_SRC
-
 Hide minor mode names in a menu.
 
 #+BEGIN_SRC emacs-lisp
-(use-package minions
-  :ensure t
-  :config (minions-mode 1)
-  :bind (("C-c m" . minions-minor-modes-menu)))
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode)
+      :config 
+        (setq doom-modeline-height 25
+              doom-modeline-buffer-file-name-style 'file-name
+              doom-modeline-icon (display-graphic-p)))
 #+END_SRC
 
 * Org Mode
 
 #+BEGIN_SRC emacs-lisp
-(use-package org
+(use-package org-plus-contrib
   :ensure t
   :bind (("C-c a" . org-agenda)
          ("C-c l" . org-store-link)
          ("C-c c" . org-capture)
          ("C-c b" . org-iswitchb))
   :config
+    (require 'ox-confluence)
     (setq org-todo-keywords
       '((sequence "TODO(t!)" "STARTED(a!)" "WAITING(w@/!)" 
                   "|" "DONE(d)" "CANCELLED(c)"))
@@ -593,7 +663,7 @@ emacs-htmlize for html export
 (use-package elfeed-org
   :ensure t
   :config
-    (setq rmh-elfeed-org-files (list "~/.emacs.d/feeds.org"))
+    (setq rmh-elfeed-org-files (list "~/Documents/Org/feeds.org"))
     (elfeed-org))
 #+END_SRC
 
@@ -604,3 +674,51 @@ emacs-htmlize for html export
   :ensure t
   :bind (("C-c h" . hackernews)))
 #+END_SRC
+
+* TripAdvisor
+
+Environment variables for the viator NSP codebase.
+
+#+BEGIN_SRC emacs-lisp
+(setenv "VIATOR_CODE" "/Users/kward/P/viator")
+(setenv "VIATOR_ENVIRONMENT" "zelda")
+(setenv "VIATOR_POP" "oxf1")
+(setenv "viator_pop" "oxf1")
+(setenv "TEAM_ENVIRONMENT" "zelda")
+(setenv "VIATOR_SUPPLIER_CENTRE" "~/P/viator/supply-platform/services/application-services/supplier-centre")
+(setenv "DISABLE_JREBEL" "false")
+(setenv "NVM_DIR" "~/.nvm")
+(setenv "VM_NUM" "99")
+#+END_SRC
+
+#+RESULTS:
+: 99
+
+Jenkins UI.
+
+#+BEGIN_SRC emacs-lisp
+(use-package jenkins
+  :ensure t
+  :config
+    (setq jenkins-api-token "11fc5532c9ee7739e8c1cd86cba336e3cc"
+          jenkins-url "https://avrdevjenkins00n.ndmad2.tripadvisor.com/job/nsp"
+          jenkins-username "kward"
+          jenkins-viewname nil))
+#+END_SRC
+
+Visual regex using PCRE.
+
+#+BEGIN_SRC emacs-lisp
+(use-package visual-regexp
+  :ensure t
+  :bind (("C-c r" . vr/query-replace)))
+
+(use-package visual-regexp-steroids
+  :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package csv-mode
+  :ensure t)
+#+END_SRC
+
