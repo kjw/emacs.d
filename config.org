@@ -502,7 +502,7 @@ Look up words in the MacOS dictionary.
 (use-package solarized-theme
   :ensure f
   :config
-    (load-theme 'solarized-light t)
+    (load-theme 'solarized-light-high-contrast t)
     (set-default-font "Inconsolata-14")
     (set-face-attribute 'cursor nil :background "#6c71c4")
     (set-face-attribute 'header-line nil :box '(:line-width 2 :color "#eee8d5") 
